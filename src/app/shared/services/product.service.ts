@@ -1,3 +1,4 @@
+import { Injectable } from "@angular/core";
 import { EMPTY, Subject, catchError, map, pipe, takeUntil, tap } from "rxjs";
 import { ProductsRepository } from "../api/products.repository";
 import { Product } from "../domain/product.type";
@@ -8,18 +9,19 @@ import { ProductState } from "./product.state";
 // * No actions, only state
 
 // ! Race conditions are possible
-
+@Injectable()
 export class ProductService {
   readonly #productState = new ProductState();
   readonly #asyncState = new AsyncState();
   readonly #destroyer$ = new Subject<void>();
 
   // State observables
+
+  readonly product$ = this.#productState.state$;
+  readonly async$ = this.#asyncState.state$;
   // ToDo: Add selectors for easier access to state
 
-  readonly sample$ = this.#productState.state$;
-  readonly async$ = this.#asyncState.state$;
-
+  readonly id$ = this.#productState.select((p) => p.id);
   constructor(private _repository: ProductsRepository, private _dialog: DialogService) {}
 
   onDestroy(): void {
@@ -39,7 +41,7 @@ export class ProductService {
     this.#onCreateEffect(name, price, stock);
   }
 
-  dispatchReadById(id: number): void {
+  dispatchReadById(id: string): void {
     this.#onReadByIdEffect(id);
   }
 
@@ -48,22 +50,22 @@ export class ProductService {
   }
 
   dispatchSell(units: number): void {
-    const product = this.#productState.get();
-    const newStock = product.stock - units;
-    const newProduct = { ...product, stock: newStock };
-    this.#onUpdateEffect(newProduct);
+    this.#productState.update((product) => {
+      const newStock = product.stock - units;
+      return { ...product, stock: newStock };
+    });
   }
 
-  dispatchDelete(id: number): void {
+  dispatchDelete(id: string): void {
     this._dialog.accept$.subscribe((_payload: any) => this.#dispatchConfirmDelete(id));
     this.#dispatchAskDelete(id);
   }
 
-  #dispatchAskDelete(id: number): void {
+  #dispatchAskDelete(id: string): void {
     this._dialog.open({ title: "Are you sure?" });
   }
 
-  #dispatchConfirmDelete(id: number): void {
+  #dispatchConfirmDelete(id: string): void {
     this.#onConfirmDeleteEffect(id);
   }
 
@@ -71,10 +73,10 @@ export class ProductService {
 
   #onCreateEffect(name: string, price: number, stock: number) {
     this.#asyncState.start();
-    this._repository.post$({ id: 0, name, price, stock }).pipe(this.#setPipe).subscribe();
+    this._repository.post$({ id: "", name, price, stock }).pipe(this.#setPipe).subscribe();
   }
 
-  #onReadByIdEffect(id: number) {
+  #onReadByIdEffect(id: string) {
     this.#asyncState.start();
     this._repository.getById$(id).pipe(this.#setPipe).subscribe();
   }
@@ -82,7 +84,7 @@ export class ProductService {
   #onReadByNameEffect(name: string) {
     this.#asyncState.start();
     this._repository
-      .getByKeyVal$("name", name)
+      .getByQuery$(name)
       .pipe(map((result: Product[]) => result[0] || this.#productState.get()))
       .pipe(this.#setPipe)
       .subscribe();
@@ -93,7 +95,7 @@ export class ProductService {
     this._repository.put$(product).pipe(this.#setPipe).subscribe();
   }
 
-  #onConfirmDeleteEffect(id: number) {
+  #onConfirmDeleteEffect(id: string) {
     this.#asyncState.start();
     this._repository.delete$(id).pipe(this.#resetPipe).subscribe();
   }
