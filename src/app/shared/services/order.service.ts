@@ -12,12 +12,20 @@ export class OrderService {
   readonly #orderState = new OrderState();
   readonly #asyncState = new AsyncState();
   readonly #destroyer$ = new Subject<void>();
+  readonly #orderPosted = new Subject<Order>();
   readonly order$ = this.#orderState.state$;
+  readonly orderPosted$ = this.#orderPosted.asObservable();
+
   constructor(private _repository: OrdersRepository) {}
+
+  onDestroy(): void {
+    this.#destroyer$.next();
+    this.#destroyer$.complete();
+  }
 
   dispatchAddProduct(productId: string, quantity: number): void {
     this.#orderState.update((order) => {
-      order.products = [...order.products, { id: productId, quantity }];
+      order.products.push({ id: productId, quantity });
       return order;
     });
   }
@@ -26,8 +34,13 @@ export class OrderService {
     const order = this.#orderState.get();
     order.date = new Date();
     order.client = "John Doe";
-    order.transport = { type: "standard", cost: order.products.length * 10 };
+    const cost = order.products.reduce((acc, p) => acc + p.quantity, 0) * 10;
+    order.transport = { type: "standard", cost };
     this.#onPostOrderEffect(order);
+  }
+
+  dispatchReset(): void {
+    this.#orderState.reset();
   }
 
   #onPostOrderEffect(order: Order): void {
@@ -44,6 +57,7 @@ export class OrderService {
     tap((s: any) => {
       this.#asyncState.complete();
       this.#orderState.set(s);
+      this.#orderPosted.next(s);
     }),
     this.#catcherPipe
   );

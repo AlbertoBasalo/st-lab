@@ -9,7 +9,9 @@ import { ProductState } from "./product.state";
 // * No actions, only state
 
 // ! Race conditions are possible
-@Injectable()
+@Injectable({
+  providedIn: "root",
+})
 export class ProductService {
   readonly #productState = new ProductState();
   readonly #asyncState = new AsyncState();
@@ -22,6 +24,10 @@ export class ProductService {
   // ToDo: Add selectors for easier access to state
 
   readonly id$ = this.#productState.select((p) => p.id);
+
+  get product(): Product {
+    return this.#productState.get();
+  }
   constructor(private _repository: ProductsRepository, private _dialog: DialogService) {}
 
   onDestroy(): void {
@@ -54,6 +60,10 @@ export class ProductService {
       const newStock = product.stock - units;
       return { ...product, stock: newStock };
     });
+  }
+
+  dispatchConfirmSell(id: string, units: number): void {
+    this.#onConfirmSellEffect(id, units);
   }
 
   dispatchDelete(id: string): void {
@@ -90,7 +100,15 @@ export class ProductService {
       .subscribe();
   }
 
-  #onUpdateEffect(product: Product) {
+  #onConfirmSellEffect(id: string, units: number) {
+    this.#asyncState.start();
+    this._repository
+      .getById$(id)
+      .pipe(map((product: Product) => ({ ...product, stock: product.stock - units })))
+      .subscribe((product: Product) => this.#onConfirmUpdateEffect(product));
+  }
+
+  #onConfirmUpdateEffect(product: Product) {
     this.#asyncState.start();
     this._repository.put$(product).pipe(this.#setPipe).subscribe();
   }
