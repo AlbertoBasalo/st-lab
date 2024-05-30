@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
+import { OrdersRepository } from "@api/orders.repository";
+import { OrderState } from "@domain/order.state";
+import { Order } from "@domain/order.type";
+import { AsyncStatusState } from "@state/async-status.state";
 import { catchError, EMPTY, Observable, pipe, Subject, takeUntil, tap } from "rxjs";
-import { OrdersRepository } from "../api/orders.repository";
-import { OrderState } from "../domain/order.state";
-import { Order } from "../domain/order.type";
-import { AsyncStatusState } from "../state/async-status.state";
 
 // * No actions, only state
 

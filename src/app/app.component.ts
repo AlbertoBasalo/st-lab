@@ -1,7 +1,8 @@
 import { AsyncPipe, NgIf } from "@angular/common";
 import { Component } from "@angular/core";
 import { RouterLink, RouterOutlet } from "@angular/router";
-import { OrderStore } from "./shared/services/order.store";
+import { environment } from "@env/environment.development";
+import { OrderStore } from "@services/order.store";
 
 @Component({
   selector: "app-root",
@@ -13,7 +14,7 @@ import { OrderStore } from "./shared/services/order.store";
       <nav>
         <ul>
           <a [routerLink]="['/']">
-            <strong>Welcome to {{ title }}!</strong>
+            <strong>{{ title }}!</strong>
           </a>
         </ul>
         <ul>
@@ -30,5 +31,5 @@ import { OrderStore } from "./shared/services/order.store";
   styles: [],
 })
 export class AppComponent {
-  title = "st-lab";
+  title = environment.appName;
 }

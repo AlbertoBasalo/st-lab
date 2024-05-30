@@ -1,8 +1,8 @@
 import { AsyncPipe } from "@angular/common";
 import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { RouterLink } from "@angular/router";
+import { OrderStore } from "@services/order.store";
 import { Observable } from "rxjs";
-import { OrderStore } from "../shared/services/order.store";
 
 @Component({
   selector: "app-classic-header",

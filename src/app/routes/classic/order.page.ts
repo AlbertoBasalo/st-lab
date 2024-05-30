@@ -1,6 +1,6 @@
 import { AsyncPipe, JsonPipe, NgIf } from "@angular/common";
 import { ChangeDetectionStrategy, Component, OnDestroy } from "@angular/core";
-import { ClassicHeaderWidget } from "../../core/classic-header.widget";
+import { ClassicHeaderWidget } from "src/app/core/classic-header.widget";
 import { OrderFacade } from "./order.facade";
 
 @Component({
