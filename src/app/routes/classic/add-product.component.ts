@@ -8,9 +8,16 @@ import { Product } from "@domain/product.type";
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [JsonPipe, NgIf],
   template: `
-    <section *ngIf="product.id !== ''">
-      <pre>{{ product | json }}</pre>
-      <section *ngIf="product.stock > 0">
+    <article *ngIf="product.id !== ''">
+      <header>
+        <strong>{{ product.name }}</strong>
+        <p>
+          <span>Price:{{ product.price }}</span>
+          <span>Stock:{{ product.stock }}</span>
+        </p>
+      </header>
+      <main *ngIf="product.stock > 0" class="grid">
+        <span>Quantity:</span>
         <input
           type="number"
           placeholder="Quantity"
@@ -18,9 +25,9 @@ import { Product } from "@domain/product.type";
           [max]="product.stock"
           [value]="quantity"
           (change)="onQuantityChange($event)" />
-        <button (click)="onAddToCartClick()">Add to cart</button>
-      </section>
-    </section>
+        <button class="outline" (click)="onAddToCartClick()">Add to cart</button>
+      </main>
+    </article>
   `,
 })
 export class AddProductComponent {

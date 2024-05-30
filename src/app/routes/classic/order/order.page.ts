@@ -9,7 +9,6 @@ import { OrderFacade } from "./order.facade";
   providers: [OrderFacade],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-classic-header />
     <section *ngIf="order$ | async as order">
       <section *ngIf="order.products.length > 0">
         <pre>{{ order | json }}</pre>
