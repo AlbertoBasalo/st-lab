@@ -1,7 +1,10 @@
+import { Observable } from "rxjs";
 import { BaseState } from "../state/base.state";
 import { Order } from "./order.type";
 
 export class OrderState extends BaseState<Order> {
+  selectUnits$: Observable<number> = this.select((order) => order.products.reduce((acc, p) => acc + p.quantity, 0));
+
   constructor() {
     super({
       id: "",

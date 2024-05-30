@@ -1,7 +1,7 @@
 import { AsyncStatus } from "./async-status.type";
 import { BaseState } from "./base.state";
 
-export class AsyncState extends BaseState<AsyncStatus> {
+export class AsyncStatusState extends BaseState<AsyncStatus> {
   constructor() {
     super({ status: "idle" });
   }

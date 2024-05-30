@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
-import { catchError, EMPTY, pipe, Subject, takeUntil, tap } from "rxjs";
+import { catchError, EMPTY, Observable, pipe, Subject, takeUntil, tap } from "rxjs";
 import { OrdersRepository } from "../api/orders.repository";
 import { OrderState } from "../domain/order.state";
 import { Order } from "../domain/order.type";
-import { AsyncState } from "../state/async.state";
+import { AsyncStatusState } from "../state/async-status.state";
 
 // * No actions, only state
 
@@ -12,11 +12,13 @@ import { AsyncState } from "../state/async.state";
 @Injectable()
 export class OrderStore {
   readonly #orderState = new OrderState();
-  readonly #asyncState = new AsyncState();
+  readonly #asyncState = new AsyncStatusState();
   readonly #destroyer$ = new Subject<void>();
   readonly #orderPosted = new Subject<Order>();
+
   readonly order$ = this.#orderState.state$;
   readonly orderPosted$ = this.#orderPosted.asObservable();
+  readonly orderUnits$: Observable<number> = this.#orderState.selectUnits$;
 
   constructor(private _repository: OrdersRepository) {}
 

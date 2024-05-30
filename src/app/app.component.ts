@@ -26,12 +26,9 @@ import { OrderStore } from "./shared/services/order.store";
     <main>
       <router-outlet />
     </main>
-    <section *ngIf="order$ | async as order">Coste transporte{{ order.transport.cost }}</section>
   `,
   styles: [],
 })
 export class AppComponent {
   title = "st-lab";
-  order$ = this.orderService.order$;
-  constructor(private orderService: OrderStore) {}
 }

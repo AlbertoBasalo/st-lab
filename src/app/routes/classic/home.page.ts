@@ -1,13 +1,15 @@
 import { AsyncPipe, JsonPipe, NgIf } from "@angular/common";
 import { ChangeDetectionStrategy, Component, OnDestroy } from "@angular/core";
-import { ClassicFacade } from "./classic.facade";
+import { ClassicHeaderWidget } from "../../core/classic-header.widget";
+import { HomeFacade } from "./home.facade";
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, JsonPipe, NgIf],
-  providers: [ClassicFacade],
+  imports: [AsyncPipe, JsonPipe, NgIf, ClassicHeaderWidget],
+  providers: [HomeFacade],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
+    <app-classic-header />
     <input
       type="search"
       placeholder="Product Name"
@@ -29,24 +31,15 @@ import { ClassicFacade } from "./classic.facade";
         </section>
       </section>
     </section>
-    <section *ngIf="order$ | async as order">
-      <section *ngIf="order.products.length > 0">
-        <pre>{{ order | json }}</pre>
-        <button (click)="onBuyClick()">Buy</button>
-      </section>
-    </section>
   `,
 })
-export default class ClassicPage implements OnDestroy {
+export default class HomePage implements OnDestroy {
   term = "bag";
   product$ = this._facade.product$;
   order$ = this._facade.order$;
   quantity = 1;
 
-  constructor(private _facade: ClassicFacade) {
-    //this.product$.subscribe((p) => (p.name = ""));
-    this._facade.create();
-  }
+  constructor(private _facade: HomeFacade) {}
 
   ngOnDestroy(): void {
     this._facade.onDestroy();
@@ -65,9 +58,5 @@ export default class ClassicPage implements OnDestroy {
 
   onAddToCartClick(): void {
     this._facade.addToCart(this.quantity);
-  }
-
-  onBuyClick(): void {
-    this._facade.buy();
   }
 }

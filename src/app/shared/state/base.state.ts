@@ -12,11 +12,9 @@ export class BaseState<T> {
 
   get(): Readonly<T> {
     return this.#state$.getValue();
-    //return this.clone(this.#state$.getValue());
   }
 
-  protected set(newState: T): void {
-    //const nextState = this.clone(newState);
+  set(newState: T): void {
     // ToDo: rollback, log, local storage, etc.
     this.#state$.next(newState);
   }
@@ -33,7 +31,7 @@ export class BaseState<T> {
     this.set(nextState);
   }
 
-  filter(predicate: (state: T) => boolean): Observable<T> {
+  filter(predicate: (state: T) => boolean): Observable<Readonly<T>> {
     return this.state$.pipe(filter(predicate), distinctUntilChanged());
   }
 
@@ -41,23 +39,10 @@ export class BaseState<T> {
     return this.state$.pipe(
       map((state: T) => mapFn(state)),
       distinctUntilChanged()
-      //map((selection: K) => this.clone(selection))
     );
   }
 
   reset(): void {
     this.set(this.initialState);
   }
-
-  //   clone<K>(item: K): K {
-  //     return JSON.parse(JSON.stringify(item));
-  //   }
-}
-
-class SingleState {
-  private state: BaseState<any>;
-  static getInstance() {
-    if (this.state) return this.state;
-  }
-  private constructor() {}
 }

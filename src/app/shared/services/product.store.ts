@@ -3,7 +3,7 @@ import { EMPTY, Subject, catchError, map, pipe, takeUntil, tap } from "rxjs";
 import { ProductsRepository } from "../api/products.repository";
 import { ProductState } from "../domain/product.state";
 import { Product } from "../domain/product.type";
-import { AsyncState } from "../state/async.state";
+import { AsyncStatusState } from "../state/async-status.state";
 import { DialogService } from "./dialog.service";
 
 // * No actions, only state
@@ -15,7 +15,7 @@ import { DialogService } from "./dialog.service";
 })
 export class ProductStore {
   readonly #productState = new ProductState();
-  readonly #asyncState = new AsyncState();
+  readonly #asyncState = new AsyncStatusState();
   readonly #destroyer$ = new Subject<void>();
 
   // State observables
