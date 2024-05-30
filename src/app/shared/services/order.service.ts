@@ -5,6 +5,10 @@ import { Order } from "../domain/order.type";
 import { AsyncState } from "../state/async.state";
 import { OrderState } from "./order.state";
 
+// * No actions, only state
+
+// ! Race conditions are possible
+
 @Injectable({
   providedIn: "root",
 })
@@ -24,19 +28,12 @@ export class OrderService {
   }
 
   dispatchAddProduct(productId: string, quantity: number): void {
-    this.#orderState.update((order) => {
-      order.products.push({ id: productId, quantity });
-      return order;
-    });
+    this.#orderState.addProduct(productId, quantity);
   }
 
   dispatchConfirmOrder(): void {
-    const order = this.#orderState.get();
-    order.date = new Date();
-    order.client = "John Doe";
-    const cost = order.products.reduce((acc, p) => acc + p.quantity, 0) * 10;
-    order.transport = { type: "standard", cost };
-    this.#onPostOrderEffect(order);
+    this.#orderState.confirmSell("John Doe");
+    this.#onPostOrderEffect(this.#orderState.get());
   }
 
   dispatchReset(): void {

@@ -4,7 +4,9 @@ import { Order } from "../shared/domain/order.type";
 import { OrderService } from "../shared/services/order.service";
 import { ProductService } from "../shared/services/product.service";
 
-@Injectable()
+@Injectable({
+  providedIn: "root",
+})
 export class ClassicFacade {
   product$ = this.productService.product$;
   order$ = this.orderService.order$;

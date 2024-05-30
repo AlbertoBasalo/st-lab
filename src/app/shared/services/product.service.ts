@@ -9,6 +9,7 @@ import { ProductState } from "./product.state";
 // * No actions, only state
 
 // ! Race conditions are possible
+
 @Injectable({
   providedIn: "root",
 })
@@ -40,11 +41,12 @@ export class ProductService {
   // ToDo: Add validations or multiple effects for different actions
 
   dispatchCreate(name: string, price: number, stock: number): void {
-    if (price < 0 || stock < 0) {
-      this.#asyncState.error("Price and stock must be greater than 0");
-      return;
+    try {
+      this.#productState.create(name, price, stock);
+      this.#onCreateEffect(this.#productState.get());
+    } catch (e: any) {
+      this.#asyncState.error(e.message);
     }
-    this.#onCreateEffect(name, price, stock);
   }
 
   dispatchReadById(id: string): void {
@@ -56,10 +58,7 @@ export class ProductService {
   }
 
   dispatchSell(units: number): void {
-    this.#productState.update((product) => {
-      const newStock = product.stock - units;
-      return { ...product, stock: newStock };
-    });
+    this.#productState.sell(units);
   }
 
   dispatchConfirmSell(id: string, units: number): void {
@@ -81,9 +80,9 @@ export class ProductService {
 
   // Where the side effects are executed
 
-  #onCreateEffect(name: string, price: number, stock: number) {
+  #onCreateEffect(product: Product) {
     this.#asyncState.start();
-    this._repository.post$({ id: "", name, price, stock }).pipe(this.#setPipe).subscribe();
+    this._repository.post$(product).pipe(this.#setPipe).subscribe();
   }
 
   #onReadByIdEffect(id: string) {
@@ -104,8 +103,12 @@ export class ProductService {
     this.#asyncState.start();
     this._repository
       .getById$(id)
-      .pipe(map((product: Product) => ({ ...product, stock: product.stock - units })))
-      .subscribe((product: Product) => this.#onConfirmUpdateEffect(product));
+      .pipe(
+        tap((product: Product) => this.#productState.set(product)),
+        tap((_product: Product) => this.#productState.sell(units)),
+        tap((_product: Product) => this.#onConfirmUpdateEffect(this.#productState.get()))
+      )
+      .subscribe();
   }
 
   #onConfirmUpdateEffect(product: Product) {
