@@ -1,6 +1,15 @@
 {
   "name": "st-lab",
-  "version": "0.0.0",
+  "description": "Angular State management laboratory",
+  "version": "18.0.0",
+  "author": {
+    "name": "Alberto Basalo",
+    "url": "https://albertobasalo.dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AlbertoBasalo/st-lab.git"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

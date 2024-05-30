@@ -1,27 +1,61 @@
 # StLab
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.1.
+Angular State management laboratory
 
-## Development server
+> [!NOTE]
+> This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version _18.0.1._
+> Updated to Angular **18.0.1.**
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 1. Requisitos para el laboratorio
 
-## Code scaffolding
+### 1.1. Instalación de Node.js y npm
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Comprobar [versión de Node.js](https://angular.io/guide/versions) y npm.
 
-## Build
+```bash
+# Check Node.js and npm versions
+node -v
+npm -v
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### 1.2. Instalación de API para pruebas
 
-## Running unit tests
+Servidor de pruebas para la aplicación. Está desarrollado con [bun](https://bun.sh/), pero se puede ejecutar en cualquier servidor de Node.js.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```bash
+git clone https://github.com/AlbertoBasalo/api_bun.git
+cd api_bun
+npm run bun:i
+npm start
+```
 
-## Running end-to-end tests
+### 1.3. Clonado del repositorio y ejecución del proyecto
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+> [!NOTE]
+> Repositorio original en [State Lab](https://github.com/AlbertoBasalo/st-lab)
 
-## Further help
+```bash
+# clone repository
+git clone https://github.com/AlbertoBasalo/st-lab
+# Install and run
+cd st-lab
+npm i
+npm start
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
+
+<footer>
+  <h3>🧑🏼‍💻 By <a href="https://albertobasalo.dev" target="blank">Alberto Basalo</a> </h3>
+  <p>
+    <a href="https://twitter.com/albertobasalo" target="blank">
+      <img src="https://img.shields.io/twitter/follow/albertobasalo?logo=twitter&style=for-the-badge" alt="twitter albertobasalo" />
+    </a>
+  </p>
+  <p>
+    <a href="https://github.com/albertobasalo" target="blank">
+      <img 
+        src="https://img.shields.io/github/followers/albertobasalo?logo=github&label=profile albertobasalo&style=for-the-badge" alt="git albertobasalo" />
+    </a>
+  </p>
+</footer>
