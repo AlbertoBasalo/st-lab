@@ -9,10 +9,8 @@ import { AsyncState } from "../state/async.state";
 
 // ! Race conditions are possible
 
-@Injectable({
-  providedIn: "root",
-})
-export class OrderService {
+@Injectable()
+export class OrderStore {
   readonly #orderState = new OrderState();
   readonly #asyncState = new AsyncState();
   readonly #destroyer$ = new Subject<void>();

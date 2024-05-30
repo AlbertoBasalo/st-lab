@@ -14,18 +14,22 @@ export class OrderState extends BaseState<Order> {
 
   addProduct(productId: string, quantity: number): void {
     this.update((order) => {
-      order.products.push({ id: productId, quantity });
-      const cost = order.products.reduce((acc, p) => acc + p.quantity, 0) * 10;
-      order.transport = { type: "", cost };
-      return order;
+      //order.products.push({ id: productId, quantity });
+      //order.transport = { type: "", cost };
+      const products = [...order.products, { id: productId, quantity }];
+      const cost = products.reduce((acc, p) => acc + p.quantity, 0) * 10;
+      const transport = { type: "", cost };
+      return { ...order, products, transport };
     });
   }
 
-  confirmSell(client: string, transport = "standard"): void {
-    this.update((order) => {
-      order.client = client;
-      order.transport.type = transport;
-      return order;
+  confirmSell(client: string, transportType = "standard"): void {
+    this.update((order: Order) => {
+      //order.client = client;
+      //order.transport.type = transport;
+
+      const transport = { ...order.transport, type: transportType };
+      return { ...order, client, transport };
     });
   }
 }

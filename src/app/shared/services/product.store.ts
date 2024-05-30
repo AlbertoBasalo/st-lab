@@ -13,7 +13,7 @@ import { DialogService } from "./dialog.service";
 @Injectable({
   providedIn: "root",
 })
-export class ProductService {
+export class ProductStore {
   readonly #productState = new ProductState();
   readonly #asyncState = new AsyncState();
   readonly #destroyer$ = new Subject<void>();

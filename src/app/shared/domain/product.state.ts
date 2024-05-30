@@ -10,7 +10,14 @@ export class ProductState extends BaseState<Product> {
     if (price < 0 || stock < 0) {
       throw new Error("Price and stock must be greater than 0");
     }
-    this.update(() => ({ id: "", name, price, stock }));
+    const newProduct = { id: "", name, price, stock };
+    newProduct.name = "origen";
+    this.set(newProduct);
+    newProduct.name = "sdfasdf";
+    const estado = this.get();
+    console.log(estado);
+    //estado.name = "zzzz";
+    //estado.name = "";
   }
 
   sell(units: number): void {

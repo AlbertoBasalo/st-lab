@@ -1,10 +1,13 @@
+import { AsyncPipe, NgIf } from "@angular/common";
 import { Component } from "@angular/core";
 import { RouterLink, RouterOutlet } from "@angular/router";
+import { OrderStore } from "./shared/services/order.store";
 
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, RouterLink, AsyncPipe, NgIf],
+  providers: [OrderStore],
   template: `
     <header>
       <nav>
@@ -23,9 +26,12 @@ import { RouterLink, RouterOutlet } from "@angular/router";
     <main>
       <router-outlet />
     </main>
+    <section *ngIf="order$ | async as order">Coste transporte{{ order.transport.cost }}</section>
   `,
   styles: [],
 })
 export class AppComponent {
   title = "st-lab";
+  order$ = this.orderService.order$;
+  constructor(private orderService: OrderStore) {}
 }

@@ -1,11 +1,12 @@
 import { AsyncPipe, JsonPipe, NgIf } from "@angular/common";
-import { Component, OnDestroy } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnDestroy } from "@angular/core";
 import { ClassicFacade } from "./classic.facade";
 
 @Component({
   standalone: true,
   imports: [AsyncPipe, JsonPipe, NgIf],
   providers: [ClassicFacade],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <input
       type="search"
@@ -42,7 +43,10 @@ export default class ClassicPage implements OnDestroy {
   order$ = this._facade.order$;
   quantity = 1;
 
-  constructor(private _facade: ClassicFacade) {}
+  constructor(private _facade: ClassicFacade) {
+    //this.product$.subscribe((p) => (p.name = ""));
+    this._facade.create();
+  }
 
   ngOnDestroy(): void {
     this._facade.onDestroy();
