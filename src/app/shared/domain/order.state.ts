@@ -1,5 +1,5 @@
-import { Order } from "../domain/order.type";
 import { BaseState } from "../state/base.state";
+import { Order } from "./order.type";
 
 export class OrderState extends BaseState<Order> {
   constructor() {

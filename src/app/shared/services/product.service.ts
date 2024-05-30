@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { EMPTY, Subject, catchError, map, pipe, takeUntil, tap } from "rxjs";
 import { ProductsRepository } from "../api/products.repository";
+import { ProductState } from "../domain/product.state";
 import { Product } from "../domain/product.type";
 import { AsyncState } from "../state/async.state";
 import { DialogService } from "./dialog.service";
-import { ProductState } from "./product.state";
 
 // * No actions, only state
 
