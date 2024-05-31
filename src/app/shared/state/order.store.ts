@@ -3,7 +3,7 @@ import { OrdersRepository } from "@api/orders.repository";
 import { OrderState } from "@domain/order.state";
 import { Order } from "@domain/order.type";
 import { AsyncStatusState } from "@state/async-status.state";
-import { catchError, EMPTY, Observable, pipe, Subject, takeUntil, tap } from "rxjs";
+import { catchError, distinctUntilChanged, EMPTY, Observable, pipe, Subject, takeUntil, tap } from "rxjs";
 
 // * No actions, only state
 
@@ -19,7 +19,7 @@ export class OrderStore {
   readonly #orderPosted = new Subject<Order>();
 
   readonly order$ = this.#orderState.state$;
-  readonly orderPosted$ = this.#orderPosted.asObservable();
+  readonly orderPosted$ = this.#orderPosted.asObservable().pipe(distinctUntilChanged());
   readonly orderUnits$: Observable<number> = this.#orderState.selectUnits$;
 
   constructor(private _repository: OrdersRepository) {}
@@ -43,7 +43,16 @@ export class OrderStore {
   }
 
   #onPostOrderEffect(order: Order): void {
-    this._repository.post$(order).pipe(this.#setPipe).subscribe();
+    this._repository
+      .post$(order)
+      .pipe(this.#setPipe)
+      .pipe(
+        tap((s: any) => {
+          this.#orderPosted.next(s);
+          console.log("Order posted, onPostOrderEffect: ", s);
+        })
+      )
+      .subscribe();
   }
 
   #catcherPipe = catchError((e) => {
@@ -56,7 +65,6 @@ export class OrderStore {
     tap((s: any) => {
       this.#asyncState.complete();
       this.#orderState.set(s);
-      this.#orderPosted.next(s);
     }),
     this.#catcherPipe
   );

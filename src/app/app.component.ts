@@ -1,14 +1,11 @@
-import { AsyncPipe, NgIf } from "@angular/common";
 import { Component } from "@angular/core";
 import { RouterLink, RouterOutlet } from "@angular/router";
-import { environment } from "@env/environment.development";
-import { OrderStore } from "@services/order.store";
+import { environment } from "@env/environment";
 
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [RouterOutlet, RouterLink, AsyncPipe, NgIf],
-  providers: [OrderStore],
+  imports: [RouterOutlet, RouterLink],
   template: `
     <header>
       <nav>

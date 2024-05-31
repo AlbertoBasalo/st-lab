@@ -4,23 +4,23 @@ import { ProductStore } from "@state/product.store";
 
 @Injectable()
 export class HomeFacade {
-  product$ = this._productService.product$;
-  order$ = this._orderService.order$;
+  product$ = this._productStore.product$;
+  order$ = this._orderStore.order$;
 
-  constructor(private _productService: ProductStore, private _orderService: OrderStore) {}
+  constructor(private _productStore: ProductStore, private _orderStore: OrderStore) {}
 
   onDestroy(): void {
-    this._orderService.onDestroy();
-    this._productService.onDestroy();
+    this._orderStore.onDestroy();
+    this._productStore.onDestroy();
   }
 
   readByName(name: string): void {
-    this._productService.dispatchReadByName(name);
+    this._productStore.dispatchReadByName(name);
   }
 
   addToCart(quantity: number): void {
-    this._productService.dispatchSell(quantity);
-    const id = this._productService.product.id;
-    this._orderService.dispatchAddProduct(id, quantity);
+    this._productStore.dispatchSell(quantity);
+    const id = this._productStore.product.id;
+    this._orderStore.dispatchAddProduct(id, quantity);
   }
 }
