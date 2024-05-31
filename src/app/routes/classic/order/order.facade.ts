@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Order } from "@domain/order.type";
-import { OrderStore } from "@services/order.store";
-import { ProductStore } from "@services/product.store";
+import { OrderStore } from "@state/order.store";
+import { ProductStore } from "@state/product.store";
 
 @Injectable()
 export class OrderFacade {

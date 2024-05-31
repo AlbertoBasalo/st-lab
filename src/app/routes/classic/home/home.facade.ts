@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { OrderStore } from "@services/order.store";
-import { ProductStore } from "@services/product.store";
+import { OrderStore } from "@state/order.store";
+import { ProductStore } from "@state/product.store";
 
 @Injectable({
   providedIn: "root",

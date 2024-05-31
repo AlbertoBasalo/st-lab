@@ -1,7 +1,7 @@
 import { AsyncPipe } from "@angular/common";
 import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { OrderStore } from "@services/order.store";
+import { OrderStore } from "@state/order.store";
 import { Observable } from "rxjs";
 
 @Component({
