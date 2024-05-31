@@ -2,9 +2,7 @@ import { Injectable } from "@angular/core";
 import { OrderStore } from "@state/order.store";
 import { ProductStore } from "@state/product.store";
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable()
 export class HomeFacade {
   product$ = this._productService.product$;
   order$ = this._orderService.order$;

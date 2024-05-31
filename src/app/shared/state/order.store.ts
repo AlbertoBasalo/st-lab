@@ -9,7 +9,9 @@ import { catchError, EMPTY, Observable, pipe, Subject, takeUntil, tap } from "rx
 
 // ! Race conditions are possible
 
-@Injectable()
+@Injectable({
+  providedIn: "root",
+})
 export class OrderStore {
   readonly #orderState = new OrderState();
   readonly #asyncState = new AsyncStatusState();

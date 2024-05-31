@@ -1,11 +1,10 @@
 import { AsyncPipe, JsonPipe, NgIf } from "@angular/common";
 import { ChangeDetectionStrategy, Component, OnDestroy } from "@angular/core";
-import { ClassicHeaderWidget } from "src/app/core/classic-header.widget";
 import { OrderFacade } from "./order.facade";
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, JsonPipe, NgIf, ClassicHeaderWidget],
+  imports: [AsyncPipe, JsonPipe, NgIf],
   providers: [OrderFacade],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `

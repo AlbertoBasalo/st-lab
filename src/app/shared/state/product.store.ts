@@ -22,7 +22,8 @@ export class ProductStore {
 
   readonly product$ = this.#productState.state$;
   readonly async$ = this.#asyncState.state$;
-  // ToDo: Add selectors for easier access to state
+
+  // selectors for easier access to state
 
   readonly id$ = this.#productState.select((p) => p.id);
 
@@ -37,8 +38,6 @@ export class ProductStore {
   }
 
   // Where the actions are dispatched
-  // ToDo: Add a generic dispatcher for common actions and race condition prevention
-  // ToDo: Add validations or multiple effects for different actions
 
   dispatchCreate(name: string, price: number, stock: number): void {
     try {
@@ -78,7 +77,7 @@ export class ProductStore {
     this.#onConfirmDeleteEffect(id);
   }
 
-  // Where the side effects are executed
+  // Where the side effects (API calls) are executed
 
   #onCreateEffect(product: Product) {
     this.#asyncState.start();
